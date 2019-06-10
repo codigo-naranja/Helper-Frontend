@@ -53,15 +53,6 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
     flexWrap: "wrap"
-  },
-  margin: {
-    margin: theme.spacing(1)
-  },
-  withoutLabel: {
-    marginTop: theme.spacing(3)
-  },
-  textField: {
-    flexBasis: 200
   }
 }));
 
@@ -104,7 +95,7 @@ const PAForm = (props) => {
         />
       </Grid>
       <Grid item xs={12} sm={8} className={cstStyles.fieldContainer}>
-        <FormControl className={clsx(cstStyles.margin, cstStyles.textField)}>
+        <FormControl className={clsx(cstStyles.field)}>
           <InputLabel htmlFor="adornment-password">Password</InputLabel>
           <Input
             id="adornment-password"

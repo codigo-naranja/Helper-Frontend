@@ -49,7 +49,7 @@ const AccessType = props => {
 
   const toggleForms = props => {
     switch (props.pathName) {
-      case "/access/loginpa":
+      case "/loginpa":
         return <PAForm/>;
       default:
         return <Buttons />;

@@ -4,7 +4,7 @@ import AccessView  from "../views/AccessView";
 
 const Routes = () => (
   <Switch>
-    <Route path="/access" component={AccessView} />
+    <Route path="/" component={AccessView} />
   </Switch>
 );
 
