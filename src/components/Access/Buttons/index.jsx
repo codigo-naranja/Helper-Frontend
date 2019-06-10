@@ -58,7 +58,7 @@ export const useStyles = makeStyles(theme => ({
 const Buttons = () => {
   const cstStyles = useStyles();
   const CollisionLink = React.forwardRef((props, ref) => (
-    <Link innerRef={ref} to="/access/loginpa" {...props} />
+    <Link innerRef={ref} to="/loginpa" {...props} />
   ));
 
   return (
