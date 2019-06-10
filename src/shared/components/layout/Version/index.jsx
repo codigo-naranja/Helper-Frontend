@@ -5,7 +5,8 @@ import { makeStyles } from "@material-ui/core/styles";
 const styles = makeStyles(theme => ({
   text: {
     fontFamily: "Roboto Mono, monospace",
-    color: "#fff"
+    color: "#fff",
+    textAlign:"center"
   }
 }));
 
