@@ -20,6 +20,10 @@ export const useStyles = makeStyles(theme => ({
     color: "#707070",
     border: "1px solid #707070",
     boxShadow: "none",
+    fontFamily: "Roboto Mono, monospace",
+    fontWeight: 500,
+    letterSpacing:1,
+    textTransform: "none",
     "&:hover": {
       color: "white",
       border: "1px solid #707070",

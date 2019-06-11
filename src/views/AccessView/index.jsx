@@ -26,7 +26,7 @@ const styles = theme => ({
       padding: theme.spacing(1),
       flexWrap: "nowrap"
     },
-    [theme.breakpoints.down(325)]: {
+    [theme.breakpoints.down(361)]: {
       height: "auto"
     }
   }
