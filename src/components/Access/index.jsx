@@ -1,60 +1,44 @@
+// DEPENDENCIES // DEPENDENCIES // DEPENDENCIES // DEPENDENCIES
 import React from "react";
+import {Link} from "react-router-dom"
 import {
   Card,
   CardContent,
   Typography,
   Grid,
   Box,
-  Divider
+  Divider,
 } from "@material-ui/core";
+// COMPONENTS // COMPONENTS // COMPONENTS // COMPONENTS
 import Buttons from "./Buttons";
 import PAForm from "./PAForm";
-import { makeStyles } from "@material-ui/core/styles";
-
-export const useStyles = makeStyles(theme => ({
-  cardContainer: {
-    width: "100%",
-    [theme.breakpoints.down("xs")]: {
-      flexBasis: "auto"
-    }
-  },
-  card: {
-    borderRadius: 12,
-    padding: theme.spacing(3, 2),
-    boxShadow: "5px 5px 8px 3px rgba(0,0,0,0.1)",
-    border: "none",
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(2)
-    }
-  },
-  title: {
-    fontSize: 16,
-    fontFamily: "Roboto Mono, monospace",
-    textAlign: "right",
-    [theme.breakpoints.down("sm")]: {
-      textAlign: "center",
-      padding: theme.spacing(2, 0, 0)
-    }
-  },
-  imgContainer: {
-    width: 150
-  },
-  img: {
-    width: "100%"
-  }
-}));
-
+import ForgotData from "./ForgotData"
+// STYLES // STYLES // STYLES // STYLES
+import { useStyles } from "./styles";
+// COMPONENT // COMPONENT // COMPONENT // COMPONENT
 const AccessType = props => {
-  const classes = useStyles();
+  const classes = useStyles(); // USE STYLES IN COMPONENT
 
   const toggleForms = props => {
     switch (props.pathName) {
       case "/loginpa":
-        return <PAForm/>;
+        return <PAForm />;
+      case "/loginpa/forgotdata":
+        return <ForgotData />;
       default:
         return <Buttons />;
     }
   };
+  const profile = props =>{
+    switch (props.pathName) {
+      case "/loginpa":
+        return <span className={classes.acu}>Acudiente o Estudiante</span>
+      case "/loginpa/forgotdata":
+        return <span>Olvidé mis datos</span>
+      default:
+        return <span>Perfil de acceso</span>
+    }
+  }
   return (
     <Grid
       item
@@ -83,17 +67,20 @@ const AccessType = props => {
               sm={6}
             >
               <Box className={classes.imgContainer}>
+              <Link to="/">
+
                 <img
                   className={classes.img}
                   alt="complex"
                   src={process.env.PUBLIC_URL + "/images/Logo-Helper.png"}
                 />
+              </Link>
               </Box>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography className={classes.title} color="textSecondary">
                 <strong>BIENVENIDO</strong> <br />
-                Perfil de acceso
+                {profile(props)}
               </Typography>
             </Grid>
           </Grid>
