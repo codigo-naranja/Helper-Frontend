@@ -5,7 +5,7 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import validate from "validate.js";
+import { userLogin } from "../../../validations";
 import {
   Fab,
   Grid,
@@ -16,7 +16,7 @@ import {
   FormControl
 } from "@material-ui/core";
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
-import ErrorModal from "../../../shared/components/layout/ErrorModal";
+import MessageModal from "../../../shared/components/layout/MessageModal";
 // STYLES // STYLES // STYLES // STYLES
 import { useStyles } from "./styles.js";
 
@@ -42,18 +42,6 @@ InputNumberMask.propTypes = {
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
 const PAForm = props => {
   const cstStyles = useStyles(); // USE STYLES IN COMPONENT
-  const constraints = {
-    tident: {
-      presence: true,
-      message: "must be at least 6 characters"
-    },
-    code: {
-      presence: true
-    },
-    password: {
-      presence: true
-    }
-  };
   // USE STATE IN FUNCTIONAL COMPONENT
   const [values, setValues] = React.useState({
     tident: "",
@@ -76,17 +64,20 @@ const PAForm = props => {
     setValues({ ...values, error: !values.error });
   };
   const onSubmit = () => {
-    if (values.tident === "" || values.code === "" || values.password === "") {
+    const errors = userLogin
+      .validate(values)
+      .map((err, i) => <li key={`00${i}`}>- {err.message}</li>);
+    if (errors.length > 0) {
       setValues({
         ...values,
         error: !values.error,
         errorTitle:
-          "¡Oops! Asegurate de tener los siguientes campos con la información adecuada:"
+          "¡Oops! Asegurate de tener los siguientes campos con la información adecuada:",
+        errorMessage: errors
       });
-     console.log(validate({tident:1234567890}, constraints)) 
     }
   };
-
+// RENDER // RENDER // RENDER // RENDER 
   return (
     <Grid
       container
@@ -94,9 +85,9 @@ const PAForm = props => {
       alignItems="center"
       className={cstStyles.actions}
     >
-      <ErrorModal
+      <MessageModal
         action={values.error}
-        closeError={closeError}
+        closeModal={closeError}
         titleMessage={values.errorTitle}
         message={values.errorMessage}
       />

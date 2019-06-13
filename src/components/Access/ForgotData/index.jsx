@@ -3,6 +3,7 @@ import React from "react";
 import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { forgotData } from "../../../validations";
 import {
   Fab,
   Grid,
@@ -12,6 +13,8 @@ import {
   MenuItem,
   Select
 } from "@material-ui/core";
+// COMPONENT // COMPONENT // COMPONENT // COMPONENT
+import MessageModal from "../../../shared/components/layout/MessageModal";
 // STYLES // STYLES // STYLES // STYLES
 import { useStyles } from "./styles.js";
 
@@ -40,7 +43,10 @@ const PAForm = props => {
   // USE STATE IN FUNCTIONAL COMPONENT
   const [values, setValues] = React.useState({
     profile: "",
-    tident: ""
+    tident: "",
+    error: false,
+    errorTitle: "",
+    errorMessage: "",
   });
   // METHODS // METHODS // METHODS // METHODS
   const inputValueChange = prop => event => {
@@ -53,6 +59,23 @@ const PAForm = props => {
       [event.target.name]: event.target.value,
     }));
   }
+  const closeError = () => {
+    setValues({ ...values, error: !values.error });
+  };
+  const onSubmit = () => {
+    const errors = forgotData
+      .validate(values)
+      .map((err, i) => <li key={`00${i}`}>- {err.message}</li>);
+    if (errors.length > 0) {
+      setValues({
+        ...values,
+        error: !values.error,
+        errorTitle:
+          "¡Oops! Asegurate de tener los siguientes campos con la información adecuada:",
+        errorMessage: errors
+      });
+    }
+  };
   return (
     <Grid
       container
@@ -60,6 +83,12 @@ const PAForm = props => {
       alignItems="center"
       className={cstStyles.actions}
     >
+       <MessageModal
+        action={values.error}
+        closeModal={closeError}
+        titleMessage={values.errorTitle}
+        message={values.errorMessage}
+      />
       <Grid item xs={12} sm={8} className={cstStyles.fieldContainer}>
         <FormControl className={cstStyles.formControl}>
           <InputLabel className={cstStyles.placeholder} htmlFor="profile">Perfil</InputLabel>
@@ -73,7 +102,7 @@ const PAForm = props => {
             }}
           >
             <MenuItem value="">
-              <em>None</em>
+              <em>Ninguno</em>
             </MenuItem>
             <MenuItem value={"est"}>Estudiante</MenuItem>
             <MenuItem value={"acu"}>Acudiente</MenuItem>
@@ -100,6 +129,7 @@ const PAForm = props => {
           variant="extended"
           color="primary"
           aria-label="Add"
+          onClick={onSubmit}
         >
           Validar
         </Fab>

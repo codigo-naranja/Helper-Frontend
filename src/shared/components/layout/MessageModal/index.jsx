@@ -11,7 +11,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-export default function AlertDialogSlide({ action, closeError, titleMessage, message }) {
+export default function AlertDialogSlide({ action, closeModal, titleMessage, message }) {
   const [open, setOpen] = React.useState(false);
 
   if (action === true && open === false) setOpen(true);
@@ -23,7 +23,7 @@ export default function AlertDialogSlide({ action, closeError, titleMessage, mes
       open={open}
       TransitionComponent={Transition}
       keepMounted
-      onClose={closeError}
+      onClose={closeModal}
       aria-labelledby="alert-dialog-slide-title"
       aria-describedby="alert-dialog-slide-description"
     >
@@ -36,7 +36,7 @@ export default function AlertDialogSlide({ action, closeError, titleMessage, mes
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeError} color="primary">
+        <Button onClick={closeModal} color="primary">
          Cerrar
         </Button>
       </DialogActions>
