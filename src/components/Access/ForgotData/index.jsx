@@ -3,7 +3,8 @@ import React from "react";
 import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { forgotData } from "../../../validations";
+import { validateForgotDataPA } from "../../../validations";
+import { forgotDataPA } from "../../../services/accessServices";
 import {
   Fab,
   Grid,
@@ -46,7 +47,7 @@ const PAForm = props => {
     tident: "",
     error: false,
     errorTitle: "",
-    errorMessage: "",
+    errorMessage: ""
   });
   // METHODS // METHODS // METHODS // METHODS
   const inputValueChange = prop => event => {
@@ -56,14 +57,14 @@ const PAForm = props => {
   function selectInputchange(event) {
     setValues(oldValues => ({
       ...oldValues,
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.value
     }));
   }
   const closeError = () => {
     setValues({ ...values, error: !values.error });
   };
   const onSubmit = () => {
-    const errors = forgotData
+    const errors = validateForgotDataPA
       .validate(values)
       .map((err, i) => <li key={`00${i}`}>- {err.message}</li>);
     if (errors.length > 0) {
@@ -74,6 +75,31 @@ const PAForm = props => {
           "¡Oops! Asegurate de tener los siguientes campos con la información adecuada:",
         errorMessage: errors
       });
+    } else {
+      forgotDataPA(values.tident, "-", values.profile)
+        .then(response => {
+          // props.push(`/loginpa/forgotdata/answer`);
+          props.push({
+            path: `/loginpa/forgotdata/answer`,
+            data: {
+              question: response.preg,
+              user: {
+                tident: values.tident,
+                profile: values.profile
+              }
+            }
+          });
+          console.log(response);
+        })
+        .catch(err => {
+          setValues({
+            ...values,
+            error: !values.error,
+            errorTitle:
+              "¡Oops! Asegurate de tener los siguientes campos con la información adecuada:",
+            errorMessage: err
+          });
+        });
     }
   };
   return (
@@ -83,7 +109,7 @@ const PAForm = props => {
       alignItems="center"
       className={cstStyles.actions}
     >
-       <MessageModal
+      <MessageModal
         action={values.error}
         closeModal={closeError}
         titleMessage={values.errorTitle}
@@ -91,9 +117,11 @@ const PAForm = props => {
       />
       <Grid item xs={12} sm={8} className={cstStyles.fieldContainer}>
         <FormControl className={cstStyles.formControl}>
-          <InputLabel className={cstStyles.placeholder} htmlFor="profile">Perfil</InputLabel>
+          <InputLabel className={cstStyles.placeholder} htmlFor="profile">
+            Perfil
+          </InputLabel>
           <Select
-          className={cstStyles.field}
+            className={cstStyles.field}
             value={values.profile}
             onChange={selectInputchange}
             inputProps={{

@@ -5,7 +5,8 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { userLogin } from "../../../validations";
+import { validateUserLoginPA } from "../../../validations";
+import { loginUserPA } from "../../../services/accessServices";
 import {
   Fab,
   Grid,
@@ -64,7 +65,7 @@ const PAForm = props => {
     setValues({ ...values, error: !values.error });
   };
   const onSubmit = () => {
-    const errors = userLogin
+    const errors = validateUserLoginPA
       .validate(values)
       .map((err, i) => <li key={`00${i}`}>- {err.message}</li>);
     if (errors.length > 0) {
@@ -75,9 +76,24 @@ const PAForm = props => {
           "¡Oops! Asegurate de tener los siguientes campos con la información adecuada:",
         errorMessage: errors
       });
+    } else {
+      loginUserPA(values.tident, values.code, values.password)
+        .then(user => {
+          props.push(`/dashboard/${user.user.id}`)
+          console.log(user);
+        })
+        .catch(err => {
+          setValues({
+            ...values,
+            error: !values.error,
+            errorTitle:
+              "¡Oops! Asegurate de tener los siguientes campos con la información adecuada:",
+            errorMessage: err
+          });
+        });
     }
   };
-// RENDER // RENDER // RENDER // RENDER 
+  // RENDER // RENDER // RENDER // RENDER
   return (
     <Grid
       container

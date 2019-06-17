@@ -1,6 +1,6 @@
 import Schema from "validate";
 
-export const userLogin = new Schema({
+export const validateUserLoginPA = new Schema({
   tident: {
     required: true,
     message: {
@@ -20,7 +20,7 @@ export const userLogin = new Schema({
     }
   }
 });
-export const forgotData = new Schema({
+export const validateForgotDataPA = new Schema({
   profile: {
     required: true,
     message: {

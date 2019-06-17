@@ -22,9 +22,9 @@ const AccessType = props => {
   const toggleForms = props => {
     switch (props.pathName) {
       case "/loginpa":
-        return <PAForm />;
+        return <PAForm push={props.history.push}/>;
       case "/loginpa/forgotdata":
-        return <ForgotData />;
+        return <ForgotData push={props.history.push}/>;
       default:
         return <Buttons />;
     }
