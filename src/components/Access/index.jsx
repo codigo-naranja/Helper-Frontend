@@ -1,18 +1,19 @@
 // DEPENDENCIES // DEPENDENCIES // DEPENDENCIES // DEPENDENCIES
 import React from "react";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 import {
   Card,
   CardContent,
   Typography,
   Grid,
   Box,
-  Divider,
+  Divider
 } from "@material-ui/core";
 // COMPONENTS // COMPONENTS // COMPONENTS // COMPONENTS
 import Buttons from "./Buttons";
 import PAForm from "./PAForm";
-import ForgotData from "./ForgotData"
+import ForgotData from "./ForgotData";
+import Question from "./Question";
 // STYLES // STYLES // STYLES // STYLES
 import { useStyles } from "./styles";
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
@@ -22,23 +23,27 @@ const AccessType = props => {
   const toggleForms = props => {
     switch (props.pathName) {
       case "/loginpa":
-        return <PAForm push={props.history.push}/>;
+        return <PAForm props={props} />;
       case "/loginpa/forgotdata":
-        return <ForgotData push={props.history.push}/>;
+        return <ForgotData props={props} />;
+      case "/loginpa/forgotdata/answer":
+        return <Question props={props} />;
       default:
         return <Buttons />;
     }
   };
-  const profile = props =>{
+  const profile = props => {
     switch (props.pathName) {
       case "/loginpa":
-        return <span className={classes.acu}>Acudiente o Estudiante</span>
+        return <span className={classes.acu}>Acudiente o Estudiante</span>;
       case "/loginpa/forgotdata":
-        return <span>Olvidé mis datos</span>
+        return <span>Olvidé mis datos</span>;
+      case "/loginpa/forgotdata/answer":
+        return <span>Pregunta de seguridad</span>;
       default:
-        return <span>Perfil de acceso</span>
+        return <span>Perfil de acceso</span>;
     }
-  }
+  };
   return (
     <Grid
       item
@@ -67,14 +72,13 @@ const AccessType = props => {
               sm={6}
             >
               <Box className={classes.imgContainer}>
-              <Link to="/">
-
-                <img
-                  className={classes.img}
-                  alt="complex"
-                  src={process.env.PUBLIC_URL + "/images/Logo-Helper.png"}
-                />
-              </Link>
+                <Link to="/">
+                  <img
+                    className={classes.img}
+                    alt="complex"
+                    src={process.env.PUBLIC_URL + "/images/Logo-Helper.png"}
+                  />
+                </Link>
               </Box>
             </Grid>
             <Grid item xs={12} sm={6}>

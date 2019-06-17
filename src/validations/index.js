@@ -34,3 +34,11 @@ export const validateForgotDataPA = new Schema({
     }
   }
 });
+export const validateAnswerQuestionPA = new Schema({
+  answer: {
+    required: true,
+    message: {
+      required: "La respuesta es requerida"
+    }
+  }
+});

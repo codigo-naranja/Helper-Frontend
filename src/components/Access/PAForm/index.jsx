@@ -41,7 +41,7 @@ InputNumberMask.propTypes = {
 };
 
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
-const PAForm = props => {
+const PAForm = ({props}) => {
   const cstStyles = useStyles(); // USE STYLES IN COMPONENT
   // USE STATE IN FUNCTIONAL COMPONENT
   const [values, setValues] = React.useState({
@@ -79,7 +79,7 @@ const PAForm = props => {
     } else {
       loginUserPA(values.tident, values.code, values.password)
         .then(user => {
-          props.push(`/dashboard/${user.user.id}`)
+          props.history.push(`/dashboard/${user.user.id}`)
           console.log(user);
         })
         .catch(err => {

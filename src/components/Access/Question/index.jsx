@@ -1,9 +1,8 @@
 // DEPENDENCIES // DEPENDENCIES // DEPENDENCIES // DEPENDENCIES
 import React from "react";
-import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { validateForgotDataPA } from "../../../validations";
+import { validateAnswerQuestionPA } from "../../../validations";
 import { forgotDataPA } from "../../../services/accessServices";
 import {
   Fab,
@@ -11,40 +10,19 @@ import {
   Input,
   InputLabel,
   FormControl,
-  MenuItem,
-  Select
+  Typography
 } from "@material-ui/core";
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
 import MessageModal from "../../../shared/components/layout/MessageModal";
 // STYLES // STYLES // STYLES // STYLES
 import { useStyles } from "./styles.js";
 
-// DON'T ALLOW TO ENTER LETTERS IN INPUTS, JUST NUMBERS
-function InputNumberMask(props) {
-  const { inputRef, ...other } = props;
-
-  return (
-    <MaskedInput
-      {...other}
-      ref={ref => {
-        inputRef(ref ? ref.inputElement : null);
-      }}
-      mask={[/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
-      placeholderChar={"\u2000"}
-    />
-  );
-}
-InputNumberMask.propTypes = {
-  inputRef: PropTypes.func.isRequired
-};
-
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
-const ForgotData = ({ props }) => {
+const Question = ({ props }) => {
   const cstStyles = useStyles(); // USE STYLES IN COMPONENT
   // USE STATE IN FUNCTIONAL COMPONENT
   const [values, setValues] = React.useState({
-    profile: "",
-    tident: "",
+    answer: "",
     error: false,
     errorTitle: "",
     errorMessage: ""
@@ -53,18 +31,11 @@ const ForgotData = ({ props }) => {
   const inputValueChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value });
   };
-
-  function selectInputchange(event) {
-    setValues(oldValues => ({
-      ...oldValues,
-      [event.target.name]: event.target.value
-    }));
-  }
   const closeError = () => {
     setValues({ ...values, error: !values.error });
   };
   const onSubmit = () => {
-    const errors = validateForgotDataPA
+    const errors = validateAnswerQuestionPA
       .validate(values)
       .map((err, i) => <li key={`00${i}`}>- {err.message}</li>);
     if (errors.length > 0) {
@@ -76,18 +47,13 @@ const ForgotData = ({ props }) => {
         errorMessage: errors
       });
     } else {
-      forgotDataPA(values.tident, "-", values.profile)
+      forgotDataPA(
+        props.history.location.state.user.tident,
+        values.answer,
+        props.history.location.state.user.profile
+      )
         .then(response => {
-          props.history.push({
-            pathname: `/loginpa/forgotdata/answer`,
-            state: {
-              question: response.preg,
-              user: {
-                tident: values.tident,
-                profile: values.profile
-              }
-            }
-          });
+          props.history.push("/");
           console.log(response);
         })
         .catch(err => {
@@ -115,38 +81,23 @@ const ForgotData = ({ props }) => {
         message={values.errorMessage}
       />
       <Grid item xs={12} sm={8} className={cstStyles.fieldContainer}>
-        <FormControl className={cstStyles.formControl}>
-          <InputLabel className={cstStyles.placeholder} htmlFor="profile">
-            Perfil
-          </InputLabel>
-          <Select
-            className={cstStyles.field}
-            value={values.profile}
-            onChange={selectInputchange}
-            inputProps={{
-              name: "profile",
-              id: "profile"
-            }}
-          >
-            <MenuItem value="">
-              <em>Ninguno</em>
-            </MenuItem>
-            <MenuItem value={"est"}>Estudiante</MenuItem>
-            <MenuItem value={"acu"}>Acudiente</MenuItem>
-          </Select>
-        </FormControl>
+        <Typography className={cstStyles.title} color="textSecondary">
+          {props.history.location.state.question
+            ? `¿${props.history.location.state.question}?`
+            : "¡Algo sucedió! intenta de nuevo el paso anterior."}
+        </Typography>
       </Grid>
       <Grid item xs={12} sm={8} className={cstStyles.fieldContainer}>
         <FormControl className={cstStyles.fieldControl}>
           <InputLabel className={cstStyles.placeholder} htmlFor="tident">
-            T.Ident o Cédula
+            Respuesta
           </InputLabel>
           <Input
             className={cstStyles.field}
-            value={values.tident}
-            onChange={inputValueChange("tident")}
-            id="tident"
-            inputComponent={InputNumberMask}
+            onChange={inputValueChange("answer")}
+            inputProps={{
+              "aria-label": "Description"
+            }}
           />
         </FormControl>
       </Grid>
@@ -161,12 +112,15 @@ const ForgotData = ({ props }) => {
           Validar
         </Fab>
       </Grid>
-      <Grid className={cstStyles.containerForgot} item xs={12}>
-        <Link to="/loginpa" className={cstStyles.forgot}>
+      <Grid className={cstStyles.containerBack} item xs={12}>
+        <Link to="/loginpa" className={cstStyles.back}>
           Regresar
         </Link>
       </Grid>
     </Grid>
   );
 };
-export default ForgotData;
+Question.propTypes = {
+  props: PropTypes.object.isRequired
+};
+export default Question;
