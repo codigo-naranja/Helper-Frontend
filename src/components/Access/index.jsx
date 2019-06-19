@@ -12,8 +12,9 @@ import {
 // COMPONENTS // COMPONENTS // COMPONENTS // COMPONENTS
 import Buttons from "./Buttons";
 import PAForm from "./PAForm";
-import ForgotData from "./ForgotData";
-import Question from "./Question";
+import PAForgotData from "./PAForgotData";
+import PAQuestion from "./PAQuestion";
+import PAFirstAccess from "./PAFirstAccess";
 // STYLES // STYLES // STYLES // STYLES
 import { useStyles } from "./styles";
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
@@ -25,9 +26,11 @@ const AccessType = props => {
       case "/loginpa":
         return <PAForm props={props} />;
       case "/loginpa/forgotdata":
-        return <ForgotData props={props} />;
+        return <PAForgotData props={props} />;
       case "/loginpa/forgotdata/answer":
-        return <Question props={props} />;
+        return <PAQuestion props={props} />;
+      case "/loginpa/firstaccess":
+        return <PAFirstAccess props={props} />;
       default:
         return <Buttons />;
     }
@@ -39,6 +42,8 @@ const AccessType = props => {
       case "/loginpa/forgotdata":
         return <span>Olvidé mis datos</span>;
       case "/loginpa/forgotdata/answer":
+        return <span>Pregunta de seguridad</span>;
+      case "/loginpa/firstaccess":
         return <span>Pregunta de seguridad</span>;
       default:
         return <span>Perfil de acceso</span>;

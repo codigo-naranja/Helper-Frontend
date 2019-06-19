@@ -42,3 +42,17 @@ export const validateAnswerQuestionPA = new Schema({
     }
   }
 });
+export const validateQuestionPA = new Schema({
+  question: {
+    required: true,
+    message: {
+      required: "La pregunta es requerida"
+    }
+  },
+  answer: {
+    required: true,
+    message: {
+      required: "La respuesta es requerida"
+    }
+  }
+});

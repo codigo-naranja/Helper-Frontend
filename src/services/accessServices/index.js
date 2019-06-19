@@ -21,3 +21,24 @@ export const forgotDataPA = (ident, respuesta, tipo) => {
       throw err.response.data.message;
     });
 };
+export const saveQuestion = (
+  ident,
+  pregunta,
+  empresa,
+  respuesta,
+  tipo,
+  token
+) => {
+  return axios
+    .post(
+      `${BaseUrl}/firstaccess`,
+      { pregunta, empresa, ident, respuesta, tipo },
+      { Authorization: token }
+    )
+    .then(response => {
+      return response.data;
+    })
+    .catch(err => {
+      throw err.response.data.message;
+    });
+};

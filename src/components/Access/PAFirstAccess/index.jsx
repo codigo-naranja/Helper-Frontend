@@ -1,10 +1,8 @@
 // DEPENDENCIES // DEPENDENCIES // DEPENDENCIES // DEPENDENCIES
 import React from "react";
-import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { validateForgotDataPA } from "../../../validations";
-import { forgotDataPA } from "../../../services/accessServices";
+import { validateQuestionPA } from "../../../validations";
+import { saveQuestion } from "../../../services/accessServices";
 import {
   Fab,
   Grid,
@@ -12,39 +10,21 @@ import {
   InputLabel,
   FormControl,
   MenuItem,
-  Select
+  Select,
+  Typography
 } from "@material-ui/core";
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
 import MessageModal from "../../../shared/components/layout/MessageModal";
 // STYLES // STYLES // STYLES // STYLES
-import { useStyles } from "./styles.js";
-
-// DON'T ALLOW TO ENTER LETTERS IN INPUTS, JUST NUMBERS
-function InputNumberMask(props) {
-  const { inputRef, ...other } = props;
-
-  return (
-    <MaskedInput
-      {...other}
-      ref={ref => {
-        inputRef(ref ? ref.inputElement : null);
-      }}
-      mask={[/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
-      placeholderChar={"\u2000"}
-    />
-  );
-}
-InputNumberMask.propTypes = {
-  inputRef: PropTypes.func.isRequired
-};
+import { useStyles } from "./styles";
 
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
-const ForgotData = ({ props }) => {
+const PAFirstAccess = ({ props }) => {
   const cstStyles = useStyles(); // USE STYLES IN COMPONENT
   // USE STATE IN FUNCTIONAL COMPONENT
   const [values, setValues] = React.useState({
-    profile: "",
-    tident: "",
+    question: "",
+    answer: "",
     error: false,
     errorTitle: "",
     errorMessage: ""
@@ -64,7 +44,7 @@ const ForgotData = ({ props }) => {
     setValues({ ...values, error: !values.error });
   };
   const onSubmit = () => {
-    const errors = validateForgotDataPA
+    const errors = validateQuestionPA
       .validate(values)
       .map((err, i) => <li key={`00${i}`}>- {err.message}</li>);
     if (errors.length > 0) {
@@ -76,10 +56,10 @@ const ForgotData = ({ props }) => {
         errorMessage: errors
       });
     } else {
-      forgotDataPA(values.tident, "-", values.profile)
+      saveQuestion(values.tident, "-", values.profile)
         .then(response => {
           props.history.push({
-            pathname: `/loginpa/forgotdata/answer`,
+            pathname: `/dashboard/`,
             state: {
               question: response.preg,
               user: {
@@ -115,38 +95,59 @@ const ForgotData = ({ props }) => {
         message={values.errorMessage}
       />
       <Grid item xs={12} sm={8} className={cstStyles.fieldContainer}>
+        <Typography className={cstStyles.title} color="textSecondary">
+          La pregunta de seguridad te ayudará a recuperar la contraseña en caso
+          de que la olvides.
+        </Typography>
+      </Grid>
+      <Grid item xs={12} sm={8} className={cstStyles.fieldContainer}>
         <FormControl className={cstStyles.formControl}>
-          <InputLabel className={cstStyles.placeholder} htmlFor="profile">
-            Perfil
+          <InputLabel className={cstStyles.placeholder} htmlFor="question">
+            Escoge una pregunta
           </InputLabel>
           <Select
             className={cstStyles.field}
-            value={values.profile}
+            value={values.question}
             onChange={selectInputchange}
             inputProps={{
-              name: "profile",
-              id: "profile"
+              name: "question",
+              id: "question"
             }}
           >
             <MenuItem value="">
               <em>Ninguno</em>
             </MenuItem>
-            <MenuItem value={"est"}>Estudiante</MenuItem>
-            <MenuItem value={"acu"}>Acudiente</MenuItem>
+            <MenuItem value={"Cúal es el nombre de tu primera mascota"}>
+              ¿Cúal es el nombre de tu primera mascota?
+            </MenuItem>
+            <MenuItem value={"En qué ciudad nació tu mamá"}>
+              ¿En qué ciudad nació tu mamá?
+            </MenuItem>
+            <MenuItem value={"En qué año nació tu papá"}>
+              ¿En qué año nació tu papá?
+            </MenuItem>
+            <MenuItem value={"Cuál era tu materia favorita en el colegio"}>
+              ¿Cuál era tu materia favorita en el colegio?
+            </MenuItem>
+            <MenuItem
+              value={"Cuál es el nombre de tu mejor amigo de la infancia"}
+            >
+              ¿Cuál es el nombre de tu mejor amigo de la infancia?
+            </MenuItem>
           </Select>
         </FormControl>
       </Grid>
       <Grid item xs={12} sm={8} className={cstStyles.fieldContainer}>
         <FormControl className={cstStyles.fieldControl}>
           <InputLabel className={cstStyles.placeholder} htmlFor="tident">
-            T.Ident o Cédula
+            Respuesta
           </InputLabel>
           <Input
             className={cstStyles.field}
-            value={values.tident}
-            onChange={inputValueChange("tident")}
-            id="tident"
-            inputComponent={InputNumberMask}
+            onChange={inputValueChange("answer")}
+            inputProps={{
+              "aria-label": "Description"
+            }}
           />
         </FormControl>
       </Grid>
@@ -158,15 +159,13 @@ const ForgotData = ({ props }) => {
           aria-label="Add"
           onClick={onSubmit}
         >
-          Validar
+          Enviar
         </Fab>
-      </Grid>
-      <Grid className={cstStyles.containerForgot} item xs={12}>
-        <Link to="/loginpa" className={cstStyles.forgot}>
-          Regresar
-        </Link>
       </Grid>
     </Grid>
   );
 };
-export default ForgotData;
+PAFirstAccess.propTypes = {
+  props: PropTypes.object.isRequired
+};
+export default PAFirstAccess;

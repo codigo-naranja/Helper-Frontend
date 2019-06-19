@@ -18,7 +18,7 @@ import MessageModal from "../../../shared/components/layout/MessageModal";
 import { useStyles } from "./styles.js";
 
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
-const Question = ({ props }) => {
+const PAQuestion = ({ props }) => {
   const cstStyles = useStyles(); // USE STYLES IN COMPONENT
   // USE STATE IN FUNCTIONAL COMPONENT
   const [values, setValues] = React.useState({
@@ -120,7 +120,7 @@ const Question = ({ props }) => {
     </Grid>
   );
 };
-Question.propTypes = {
+PAQuestion.propTypes = {
   props: PropTypes.object.isRequired
 };
-export default Question;
+export default PAQuestion;
