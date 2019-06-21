@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 // COMPONENTS // COMPONENTS // COMPONENTS // COMPONENTS
 import Buttons from "./Buttons";
-import PAForm from "./PAForm";
+import PALogin from "./PALogin";
 import PAForgotData from "./PAForgotData";
 import PAQuestion from "./PAQuestion";
 import PAFirstAccess from "./PAFirstAccess";
@@ -24,7 +24,7 @@ const AccessType = props => {
   const toggleForms = props => {
     switch (props.pathName) {
       case "/loginpa":
-        return <PAForm props={props} />;
+        return <PALogin props={props} />;
       case "/loginpa/forgotdata":
         return <PAForgotData props={props} />;
       case "/loginpa/forgotdata/answer":

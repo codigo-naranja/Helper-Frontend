@@ -2,25 +2,13 @@
 import React from "react";
 import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+// UTILS // UTILS // UTILS // UTILS 
 import { validateForgotDataPA } from "../../../validations";
 import { forgotDataPA } from "../../../services/accessServices";
-import {
-  Fab,
-  Grid,
-  Input,
-  InputLabel,
-  FormControl,
-  MenuItem,
-  Select
-} from "@material-ui/core";
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
-import MessageModal from "../../../shared/components/layout/MessageModal";
-// STYLES // STYLES // STYLES // STYLES
-import { useStyles } from "./styles";
-
+import Form from "./Form";
 // DON'T ALLOW TO ENTER LETTERS IN INPUTS, JUST NUMBERS
-function InputNumberMask(props) {
+const InputNumberMask = props => {
   const { inputRef, ...other } = props;
 
   return (
@@ -33,14 +21,13 @@ function InputNumberMask(props) {
       placeholderChar={"\u2000"}
     />
   );
-}
+};
 InputNumberMask.propTypes = {
   inputRef: PropTypes.func.isRequired
 };
 
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
 const PAForgotData = ({ props }) => {
-  const cstStyles = useStyles(); // USE STYLES IN COMPONENT
   // USE STATE IN FUNCTIONAL COMPONENT
   const [values, setValues] = React.useState({
     profile: "",
@@ -78,14 +65,11 @@ const PAForgotData = ({ props }) => {
     } else {
       forgotDataPA(values.tident, "-", values.profile)
         .then(response => {
-          props.history.push({
-            pathname: `/loginpa/forgotdata/answer`,
-            state: {
-              question: response.preg,
-              user: {
-                tident: values.tident,
-                profile: values.profile
-              }
+          props.history.push(`/loginpa/forgotdata/answer`, {
+            question: response.preg,
+            user: {
+              tident: values.tident,
+              profile: values.profile
             }
           });
           console.log(response);
@@ -102,71 +86,14 @@ const PAForgotData = ({ props }) => {
     }
   };
   return (
-    <Grid
-      container
-      direction="column"
-      alignItems="center"
-      className={cstStyles.actions}
-    >
-      <MessageModal
-        action={values.error}
-        closeModal={closeError}
-        titleMessage={values.errorTitle}
-        message={values.errorMessage}
-      />
-      <Grid item xs={12} sm={8} className={cstStyles.fieldContainer}>
-        <FormControl className={cstStyles.formControl}>
-          <InputLabel className={cstStyles.placeholder} htmlFor="profile">
-            Perfil
-          </InputLabel>
-          <Select
-            className={cstStyles.field}
-            value={values.profile}
-            onChange={selectInputchange}
-            inputProps={{
-              name: "profile",
-              id: "profile"
-            }}
-          >
-            <MenuItem value="">
-              <em>Ninguno</em>
-            </MenuItem>
-            <MenuItem value={"est"}>Estudiante</MenuItem>
-            <MenuItem value={"acu"}>Acudiente</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>
-      <Grid item xs={12} sm={8} className={cstStyles.fieldContainer}>
-        <FormControl className={cstStyles.fieldControl}>
-          <InputLabel className={cstStyles.placeholder} htmlFor="tident">
-            T.Ident o Cédula
-          </InputLabel>
-          <Input
-            className={cstStyles.field}
-            value={values.tident}
-            onChange={inputValueChange("tident")}
-            id="tident"
-            inputComponent={InputNumberMask}
-          />
-        </FormControl>
-      </Grid>
-      <Grid className={cstStyles.containerBtn} item xs={12} sm={6}>
-        <Fab
-          className={cstStyles.btn}
-          variant="extended"
-          color="primary"
-          aria-label="Add"
-          onClick={onSubmit}
-        >
-          Validar
-        </Fab>
-      </Grid>
-      <Grid className={cstStyles.containerForgot} item xs={12}>
-        <Link to="/loginpa" className={cstStyles.forgot}>
-          Regresar
-        </Link>
-      </Grid>
-    </Grid>
+    <Form
+      onSubmit={onSubmit}
+      closeError={closeError}
+      selectInputchange={selectInputchange}
+      inputValueChange={inputValueChange}
+      InputNumberMask={InputNumberMask}
+      values={values}
+    />
   );
 };
 PAForgotData.propTypes = {

@@ -2,11 +2,8 @@
 import React from "react";
 import clsx from "clsx";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { validateUserLoginPA } from "../../../validations";
-import { loginUserPA } from "../../../services/accessServices";
 import {
   Fab,
   Grid,
@@ -21,80 +18,16 @@ import MessageModal from "../../../shared/components/layout/MessageModal";
 // STYLES // STYLES // STYLES // STYLES
 import { useStyles } from "./styles.js";
 
-// DON'T ALLOW TO ENTER LETTERS IN INPUTS, JUST NUMBERS
-function InputNumberMask(props) {
-  const { inputRef, ...other } = props;
-
-  return (
-    <MaskedInput
-      {...other}
-      ref={ref => {
-        inputRef(ref ? ref.inputElement : null);
-      }}
-      mask={[/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
-      placeholderChar={"\u2000"}
-    />
-  );
-}
-InputNumberMask.propTypes = {
-  inputRef: PropTypes.func.isRequired
-};
-
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
-const PAForm = ({ props }) => {
+const Form = ({
+  onSubmit,
+  closeError,
+  handleClickShowPassword,
+  inputValueChange,
+  InputNumberMask,
+  values
+}) => {
   const cstStyles = useStyles(); // USE STYLES IN COMPONENT
-  // USE STATE IN FUNCTIONAL COMPONENT
-  const [values, setValues] = React.useState({
-    tident: "",
-    code: "",
-    password: "",
-    error: false,
-    errorTitle: "",
-    errorMessage: "",
-    showPassword: false
-  });
-  // METHODS // METHODS // METHODS // METHODS
-  const inputValueChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
-  };
-  const closeError = () => {
-    setValues({ ...values, error: !values.error });
-  };
-  const onSubmit = () => {
-    const errors = validateUserLoginPA
-      .validate(values)
-      .map((err, i) => <li key={`00${i}`}>- {err.message}</li>);
-    if (errors.length > 0) {
-      setValues({
-        ...values,
-        error: !values.error,
-        errorTitle:
-          "¡Oops! Asegurate de tener los siguientes campos con la información adecuada:",
-        errorMessage: errors
-      });
-    } else {
-      loginUserPA(values.tident, values.code, values.password)
-        .then(user => {
-          user.user.seg === 1
-            ? props.history.push(`/loginpa/firstaccess`)
-            : props.history.push(`/dashboard/${user.user.id}`);
-          console.log(user);
-        })
-        .catch(err => {
-          setValues({
-            ...values,
-            error: !values.error,
-            errorTitle:
-              "¡Oops! Asegurate de tener los siguientes campos con la información adecuada:",
-            errorMessage: err
-          });
-        });
-    }
-  };
   // RENDER // RENDER // RENDER // RENDER
   return (
     <Grid
@@ -180,7 +113,12 @@ const PAForm = ({ props }) => {
     </Grid>
   );
 };
-PAForm.propTypes = {
-  props: PropTypes.object.isRequired
+Form.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  closeError: PropTypes.func.isRequired,
+  handleClickShowPassword: PropTypes.func.isRequired,
+  inputValueChange: PropTypes.func.isRequired,
+  InputNumberMask: PropTypes.func.isRequired,
+  values: PropTypes.object.isRequired
 };
-export default PAForm;
+export default Form;
