@@ -8,7 +8,7 @@ import { saveQuestion } from "../../../services/accessServices";
 import Form from "./Form";
 
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
-const PAFirstAccess = ({ props }) => {
+const PAFirstAccess = props => {
   // USE STATE IN FUNCTIONAL COMPONENT
   const [values, setValues] = React.useState({
     question: "",

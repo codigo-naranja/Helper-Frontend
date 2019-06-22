@@ -27,7 +27,7 @@ InputNumberMask.propTypes = {
 };
 
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
-const PALogin = ({ props }) => {
+const PALogin = props => {
   // USE STATE IN FUNCTIONAL COMPONENT
   const [values, setValues] = React.useState({
     tident: "",
@@ -65,7 +65,7 @@ const PALogin = ({ props }) => {
       loginUserPA(values.tident, values.code, values.password)
         .then(user => {
           user.user.seg === 1
-            ? props.history.push(`/loginpa/firstaccess`)
+            ? props.history.push(`/loginpa/firstaccess/${user.user.id}`)
             : props.history.push(`/dashboard/${user.user.id}`);
           console.log(user);
         })

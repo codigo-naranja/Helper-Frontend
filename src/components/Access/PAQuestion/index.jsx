@@ -7,7 +7,7 @@ import { forgotDataPA } from "../../../services/accessServices";
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
 import Form from "./Form";
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
-const PAQuestion = ({ props }) => {
+const PAQuestion = props => {
   // USE STATE IN FUNCTIONAL COMPONENT
   const [values, setValues] = React.useState({
     answer: "",

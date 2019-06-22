@@ -2,7 +2,7 @@
 import React from "react";
 import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
-// UTILS // UTILS // UTILS // UTILS 
+// UTILS // UTILS // UTILS // UTILS
 import { validateForgotDataPA } from "../../../validations";
 import { forgotDataPA } from "../../../services/accessServices";
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
@@ -27,7 +27,7 @@ InputNumberMask.propTypes = {
 };
 
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
-const PAForgotData = ({ props }) => {
+const PAForgotData = props => {
   // USE STATE IN FUNCTIONAL COMPONENT
   const [values, setValues] = React.useState({
     profile: "",
