@@ -65,7 +65,7 @@ const AccessView = props => {
               <Grid item xs={12} sm={6}>
                 <Typography className={classes.title} color="textSecondary">
                   <strong>BIENVENIDO</strong> <br />
-                  <span>{profile}</span>
+                  <span className={classes.subtitle}>{profile}</span>
                 </Typography>
               </Grid>
             </Grid>

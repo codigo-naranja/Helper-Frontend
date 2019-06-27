@@ -2,9 +2,12 @@
 import React from "react";
 import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 // UTILS // UTILS // UTILS // UTILS
 import { validateUserLoginPA } from "../../../validations";
 import { loginUserPA } from "../../../services/accessServices";
+// REDUX // REDUX // REDUX // REDUX
+import saveUser from "../../../redux/actions/saveUser";
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
 import Form from "./Form";
 // DON'T ALLOW TO ENTER LETTERS IN INPUTS, JUST NUMBERS
@@ -67,7 +70,7 @@ const PALogin = props => {
           user.user.seg === 1
             ? props.history.push(`/loginpa/firstaccess/${user.user.id}`)
             : props.history.push(`/dashboard/${user.user.id}`);
-          console.log(user);
+          props.saveUser(user);
         })
         .catch(err => {
           setValues({
@@ -95,4 +98,15 @@ const PALogin = props => {
 PALogin.propTypes = {
   props: PropTypes.object.isRequired
 };
-export default PALogin;
+const mapStateToProps = state => {
+  return {
+    user: state.users
+  };
+};
+const mapDispatchToProps = {
+  saveUser
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PALogin);

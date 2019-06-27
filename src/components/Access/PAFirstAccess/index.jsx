@@ -1,6 +1,7 @@
 // DEPENDENCIES // DEPENDENCIES // DEPENDENCIES // DEPENDENCIES
 import React from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 // UTILS // UTILS // UTILS // UTILS
 import { validateQuestionPA } from "../../../validations";
 import { saveQuestion } from "../../../services/accessServices";
@@ -44,9 +45,16 @@ const PAFirstAccess = props => {
         errorMessage: errors
       });
     } else {
-      saveQuestion(values.tident, "-", values.profile)
+      saveQuestion(
+        props.user.user.id,
+        values.question,
+        props.user.user.nit,
+        values.answer,
+        props.user.user.perf,
+        props.user.token
+      )
         .then(response => {
-          console.log(response);
+          props.history.push(`/dashboard/${props.user.user.id}`);
         })
         .catch(err => {
           setValues({
@@ -72,4 +80,9 @@ const PAFirstAccess = props => {
 PAFirstAccess.propTypes = {
   props: PropTypes.object.isRequired
 };
-export default PAFirstAccess;
+const mapStateToProps = state => {
+  return {
+    user: state.users[0]
+  };
+};
+export default connect(mapStateToProps)(PAFirstAccess);

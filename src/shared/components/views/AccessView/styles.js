@@ -52,7 +52,7 @@ export const useStyles = makeStyles(theme => ({
   img: {
     width: "100%"
   },
-  acu: {
+  subtitle: {
     [theme.breakpoints.up("sm")]: {
       fontSize: "14px"
     }
