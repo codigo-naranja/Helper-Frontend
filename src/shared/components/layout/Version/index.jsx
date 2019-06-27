@@ -1,7 +1,10 @@
 // DEPENDENCIES // DEPENDENCIES // DEPENDENCIES // DEPENDENCIES
-import React from "react";
+import React, { useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
+import CustomizedSnackbars from "../popMessage";
 import { makeStyles } from "@material-ui/core/styles";
+// UTILS // UTILS // UTILS // UTILS
+import { getVersion } from "../../../../services/accessServices";
 // STYLES // STYLES // STYLES // STYLES
 const styles = makeStyles(theme => ({
   text: {
@@ -13,15 +16,42 @@ const styles = makeStyles(theme => ({
 // COMPONENT // COMPONENT // COMPONENT // COMPONENT
 const Version = () => {
   const classes = styles(); // USE STYLES IN COMPONENT
+  const [version, setVersion] = React.useState();
+  const [schedule, setSchedule] = React.useState(0);
+  const [message, setMessage] = React.useState("");
+  useEffect(() => {
+    getVersion()
+      .then(result => {
+        setVersion(result.versionPA);
+        setMessage(result.Comentario);
+        setSchedule(result.programado);
+      })
+      .catch(err => {
+        setVersion("");
+      });
+  }, []);
+
   return (
-    <Typography
-      className={classes.text}
-      variant="caption"
-      display="block"
-      gutterBottom
-    >
-      © 2019 Código Naranja | Todos los derechos reservados | Version 5.0
-    </Typography>
+    <React.Fragment>
+      {schedule === 1 && (
+        <CustomizedSnackbars
+          type="warning"
+          message={message}
+          vertical="bottom"
+          horizontal="left"
+        />
+      )}
+
+      <Typography
+        className={classes.text}
+        variant="caption"
+        display="block"
+        gutterBottom
+      >
+        © 2019 Código Naranja | Todos los derechos reservados | Version{" "}
+        {version ? version : "..."}
+      </Typography>
+    </React.Fragment>
   );
 };
 

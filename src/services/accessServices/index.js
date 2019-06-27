@@ -42,3 +42,14 @@ export const saveQuestion = (
       throw err.response.data.message;
     });
 };
+
+export const getVersion = () => {
+  return axios
+    .get(`${BaseUrl}/version`)
+    .then(response => {
+      return response.data[0];
+    })
+    .catch(err => {
+      throw err.response.data.message;
+    });
+};
